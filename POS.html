@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Point of Sale | eCommerce Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f4f6f9;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: #333;
+        }
+
+        .navbar {
+            background-color: #1a2d3e;
+            padding: 10px 20px;
+        }
+
+        .navbar-brand {
+            font-size: 1.8rem;
+            font-weight: bold;
+        }
+
+        .navbar-nav .nav-link {
+            color: #ddd;
+        }
+
+        .navbar-nav .nav-link.active {
+            color: #fff;
+            background-color: #007bff;
+            border-radius: 5px;
+        }
+
+        .container {
+            margin-top: 80px;
+        }
+
+        .product-form {
+            margin-top: 30px;
+        }
+
+        .product-form label {
+            font-weight: bold;
+        }
+
+        .cart-total {
+            font-weight: bold;
+            font-size: 1.3rem;
+        }
+
+        .receipt {
+            margin-top: 40px;
+            padding: 20px;
+            background-color: #f9f9f9;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .receipt-header {
+            font-size: 1.5rem;
+            text-align: center;
+            margin-bottom: 15px;
+        }
+
+        .receipt-details {
+            margin-bottom: 20px;
+        }
+
+        .receipt-total {
+            font-size: 1.2rem;
+            font-weight: bold;
+        }
+        @media (max-width: 576px) {
+            .navbar-brand {
+                font-size: 1.5rem;
+            }
+            .navbar-nav .nav-link {
+            padding-left: 1rem;
+        }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar with Hamburger Menu -->
+    <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">Dashboard</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="POS.html">Point of Sale</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="products.html">Products</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="Customers.html">Customers</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="Sales-History.html">Sales History</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="settings.html">Settings</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Point of Sale Content -->
+    <div class="container col-md-9 col-sm-12">
+        <h2 class="mb-4 text-center">Point of Sale</h2>
+
+        <!-- Product and Customer Form -->
+        <div class="product-form">
+            <h3>Enter Transaction Details</h3>
+            <form id="posForm">
+                <div class="mb-3">
+                    <label for="productName" class="form-label">Product Name</label>
+                    <select class="form-control" id="productName" required>
+                        <option value="">Select Product</option>
+                        <!-- Product options will be dynamically added here -->
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label for="quantity" class="form-label">Quantity</label>
+                    <input type="number" class="form-control" id="quantity" placeholder="Enter quantity" required min="1">
+                </div>
+                <div class="mb-3">
+                    <label for="tag" class="form-label">Tag (Description)</label>
+                    <input type="text" class="form-control" id="tag" placeholder="Enter a short description">
+                </div>
+                <div class="mb-3">
+                    <label for="customerName" class="form-label">Customer Name</label>
+                    <select class="form-control" id="customerName" required>
+                        <option value="">Select Customer</option>
+                        <!-- Customer options will be dynamically added here -->
+                    </select>
+                </div>
+                <div class="mb-3" id="newCustomer" style="display:none;">
+                    <label for="newCustomerName" class="form-label">New Customer Name</label>
+                    <input type="text" class="form-control" id="newCustomerName" placeholder="Enter new customer name">
+                </div>
+                <button type="button" id="addToCart" class="btn btn-primary">Add to Cart</button>
+                <button type="button" id="viewCart" class="btn btn-info" data-bs-toggle="modal" data-bs-target="#cartModal">View Cart</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal for Cart -->
+    <div class="modal fade" id="cartModal" tabindex="-1" aria-labelledby="cartModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="cartModalLabel">Cart</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Product</th>
+                                <th>Quantity</th>
+                                <th>Price</th>
+                                <th>Total</th>
+                                <th>Tag</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="cartItemsModal">
+                            <!-- Cart items will be dynamically added here -->
+                        </tbody>
+                    </table>
+                    <div class="cart-total">
+                        Total: #<span id="cartTotalModal">0.00</span>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" id="completeSale" class="btn btn-success">Complete Sale</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap and jsPDF JavaScript -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script>
+        // Sample products and customers in localStorage
+        const sampleProducts = [
+            { id: 1, name: "Product 1", price: 19.99, quantity: 100 },
+            { id: 2, name: "Product 2", price: 29.99, quantity: 50 },
+            { id: 3, name: "Product 3", price: 39.99, quantity: 75 }
+        ];
+        const sampleCustomers = [
+            { id: 1, name: "Customer 1" },
+            { id: 2, name: "Customer 2" }
+        ];
+
+        // Initialize localStorage with sample data if not present
+        if (!localStorage.getItem('products')) {
+            localStorage.setItem('products', JSON.stringify(sampleProducts));
+        }
+        if (!localStorage.getItem('customers')) {
+            localStorage.setItem('customers', JSON.stringify(sampleCustomers));
+        }
+
+        // Load products and customers from localStorage
+        function loadProductsAndCustomers() {
+            const products = JSON.parse(localStorage.getItem('products'));
+            const customers = JSON.parse(localStorage.getItem('customers'));
+
+            // Populate product dropdown
+            const productDropdown = document.getElementById('productName');
+            products.forEach(product => {
+                const option = document.createElement('option');
+                option.value = product.name;
+                option.textContent = product.name;
+                productDropdown.appendChild(option);
+            });
+
+            // Populate customer dropdown
+            const customerDropdown = document.getElementById('customerName');
+            customers.forEach(customer => {
+                const option = document.createElement('option');
+                option.value = customer.name;
+                option.textContent = customer.name;
+                customerDropdown.appendChild(option);
+            });
+        }
+
+        // Cart array to hold selected products
+        let cart = [];
+
+        // Sales history array to store completed sales
+        let salesHistory = [];
+
+        // Load sales history from localStorage on page load
+        function loadSalesHistoryFromLocalStorage() {
+            const savedSalesHistory = localStorage.getItem('salesHistory');
+            if (savedSalesHistory) {
+                salesHistory = JSON.parse(savedSalesHistory);
+                updateSalesHistoryDisplay();
+            }
+        }
+
+        // Save sales history to localStorage
+        function saveSalesHistoryToLocalStorage() {
+            localStorage.setItem('salesHistory', JSON.stringify(salesHistory));
+        }
+
+        // Add product to cart
+        document.getElementById('addToCart').addEventListener('click', function() {
+            const productName = document.getElementById('productName').value;
+            const quantity = parseInt(document.getElementById('quantity').value);
+            const tag = document.getElementById('tag').value;
+
+            const products = JSON.parse(localStorage.getItem('products'));
+            const selectedProduct = products.find(product => product.name === productName);
+
+            if (!selectedProduct || selectedProduct.quantity < quantity) {
+                alert("Insufficient stock or invalid product");
+                return;
+            }
+
+            // Add product to cart
+            const cartItem = {
+                id: Date.now(), // Unique ID for the cart item
+                name: selectedProduct.name,
+                quantity: quantity,
+                price: selectedProduct.price,
+                total: (selectedProduct.price * quantity).toFixed(2),
+                tag: tag // Add tag to the cart item
+            };
+            cart.push(cartItem);
+
+            // Update cart display
+            updateCartDisplay();
+
+            // Clear form fields
+            document.getElementById('productName').value = '';
+            document.getElementById('quantity').value = '';
+            document.getElementById('tag').value = '';
+        });
+
+        // Update cart display
+        function updateCartDisplay() {
+            const cartItemsModal = document.getElementById('cartItemsModal');
+            cartItemsModal.innerHTML = '';
+            let total = 0;
+
+            cart.forEach(item => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${item.name}</td>
+                    <td>${item.quantity}</td>
+                    <td>#${item.price}</td>
+                    <td>#${item.total}</td>
+                    <td>${item.tag}</td>
+                    <td><button class="btn btn-danger btn-sm" onclick="deleteCartItem(${item.id})">Delete</button></td>
+                `;
+                cartItemsModal.appendChild(row);
+                total += parseFloat(item.total);
+            });
+
+            document.getElementById('cartTotalModal').textContent = total.toFixed(2);
+        }
+
+        // Delete item from cart
+        function deleteCartItem(itemId) {
+            cart = cart.filter(item => item.id !== itemId);
+            updateCartDisplay();
+        }
+
+        // Handle sale completion and save to sales history
+        document.getElementById('completeSale').addEventListener('click', function () {
+            const customerName = document.getElementById('customerName').value;
+
+            // Deduct sold items from product inventory
+            const products = JSON.parse(localStorage.getItem('products'));
+            cart.forEach(cartItem => {
+                const product = products.find(p => p.name === cartItem.name);
+                if (product) {
+                    product.quantity -= cartItem.quantity; // Deduct quantity
+                }
+            });
+            localStorage.setItem('products', JSON.stringify(products)); // Update products in localStorage
+
+            // Create a sales history entry
+            const sale = {
+                id: Date.now(), // Unique ID for the sale
+                customerName: customerName,
+                items: [...cart], // Copy of the cart items
+                total: document.getElementById('cartTotalModal').textContent,
+                date: new Date().toLocaleString()
+            };
+
+            // Check if this is an edit or a new sale
+            const editSale = JSON.parse(localStorage.getItem('editSale'));
+            if (editSale) {
+                // Remove the old sale from sales history
+                let salesHistory = JSON.parse(localStorage.getItem('salesHistory')) || [];
+                salesHistory = salesHistory.filter(s => s.id !== editSale.id);
+                localStorage.setItem('salesHistory', JSON.stringify(salesHistory));
+
+                // Remove the editSale data from localStorage
+                localStorage.removeItem('editSale');
+            }
+
+            // Add the new/edited sale to sales history
+            let salesHistory = JSON.parse(localStorage.getItem('salesHistory')) || [];
+            salesHistory.push(sale);
+            localStorage.setItem('salesHistory', JSON.stringify(salesHistory));
+
+            // Clear the cart
+            cart = [];
+            updateCartDisplay();
+
+            // Close the modal
+            const cartModal = bootstrap.Modal.getInstance(document.getElementById('cartModal'));
+            cartModal.hide();
+
+            alert("Sale completed successfully!");
+        });
+        // Initial page load
+        // Add this to the POS page script
+window.onload = function () {
+    loadProductsAndCustomers();
+
+    // Check if there's a sale to edit
+    const editSale = JSON.parse(localStorage.getItem('editSale'));
+    if (editSale) {
+        // Pre-fill the customer name
+        document.getElementById('customerName').value = editSale.customerName;
+
+        // Pre-fill the cart
+        cart = editSale.items;
+        updateCartDisplay();
+    }
+};
+    </script>
+</body>
+</html>

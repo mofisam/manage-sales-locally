@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Customer Management | eCommerce Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        /* General body styling */
+        body {
+            background-color: #f4f6f9;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: #333;
+        }
+        .navbar {
+            background-color: #1a2d3e;
+            padding: 10px 20px;
+        }
+        .navbar-brand {
+            font-size: 1.8rem;
+            font-weight: bold;
+        }
+        .navbar-nav .nav-link {
+            color: #ddd;
+        }
+        .navbar-nav .nav-link.active {
+            color: #fff;
+            background-color: #007bff;
+            border-radius: 5px;
+        }
+
+        /* Main content area */
+        .container {
+            margin-top: 80px;
+        }
+
+        /* Styling for the customer list table */
+        .customer-table {
+            width: 100%;
+            margin-top: 30px;
+            border-collapse: collapse;
+        }
+
+        .customer-table th, .customer-table td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+
+        .customer-table th {
+            background-color: #f8f9fa;
+            font-weight: bold;
+        }
+
+        .customer-table tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .sidebar {
+                display: none;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .navbar-brand {
+                font-size: 1.5rem;
+            }
+            .navbar-nav .nav-link {
+            padding-left: 1rem;
+        }
+        }
+    </style>
+</head>
+<body>
+     <!-- Navbar with Hamburger Menu -->
+     <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">Dashboard</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="POS.html">Point of Sale</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="products.html">Products</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="Customers.html">Customers</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="Sales-History.html">Sales History</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="settings.html">Settings</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+        <!-- Customer Management Content -->
+        <div class="container col-md-9 col-sm-12">
+            <h2 class="mb-4 text-center">Customer Management</h2>
+            
+            <!-- Button to show the customer form in modal -->
+            <button class="btn btn-primary mb-4" data-bs-toggle="modal" data-bs-target="#customerFormModal">Add New Customer</button>
+
+            <!-- Customer List Table -->
+            <table class="customer-table">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Phone</th>
+                        <th>Address</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="customerTableBody">
+                    <!-- Customer rows will be added here dynamically -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Add Customer Modal -->
+    <div class="modal fade" id="customerFormModal" tabindex="-1" aria-labelledby="customerFormModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="customerFormModalLabel">Add New Customer</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="customerForm">
+                        <div class="mb-3">
+                            <label for="customerName" class="form-label">Customer Name</label>
+                            <input type="text" class="form-control" id="customerName" placeholder="Enter customer name">
+                        </div>
+                        <div class="mb-3">
+                            <label for="customerEmail" class="form-label">Customer Email</label>
+                            <input type="email" class="form-control" id="customerEmail" placeholder="Enter customer email">
+                        </div>
+                        <div class="mb-3">
+                            <label for="customerPhone" class="form-label">Customer Phone</label>
+                            <input type="text" class="form-control" id="customerPhone" placeholder="Enter customer phone">
+                        </div>
+                        <div class="mb-3">
+                            <label for="customerAddress" class="form-label">Customer Address</label>
+                            <textarea class="form-control" id="customerAddress" rows="3" placeholder="Enter customer address"></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Add Customer</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit Customer Modal -->
+    <div class="modal fade" id="editCustomerModal" tabindex="-1" aria-labelledby="editCustomerModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editCustomerModalLabel">Edit Customer</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="editCustomerForm">
+                        <div class="mb-3">
+                            <label for="editCustomerName" class="form-label">Customer Name</label>
+                            <input type="text" class="form-control" id="editCustomerName" placeholder="Enter customer name">
+                        </div>
+                        <div class="mb-3">
+                            <label for="editCustomerEmail" class="form-label">Customer Email</label>
+                            <input type="email" class="form-control" id="editCustomerEmail" placeholder="Enter customer email">
+                        </div>
+                        <div class="mb-3">
+                            <label for="editCustomerPhone" class="form-label">Customer Phone</label>
+                            <input type="text" class="form-control" id="editCustomerPhone" placeholder="Enter customer phone">
+                        </div>
+                        <div class="mb-3">
+                            <label for="editCustomerAddress" class="form-label">Customer Address</label>
+                            <textarea class="form-control" id="editCustomerAddress" rows="3" placeholder="Enter customer address"></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Save Changes</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap and JavaScript -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Load customers from localStorage
+        function loadCustomers() {
+            const customers = JSON.parse(localStorage.getItem('customers')) || [];
+            const customerTableBody = document.getElementById('customerTableBody');
+            customerTableBody.innerHTML = '';  // Clear table before adding
+
+            customers.forEach((customer, index) => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${customer.name}</td>
+                    <td>${customer.email}</td>
+                    <td>${customer.phone}</td>
+                    <td>${customer.address}</td>
+                    <td>
+                        <button class="btn btn-warning btn-sm" onclick="editCustomer(${index})" data-bs-toggle="modal" data-bs-target="#editCustomerModal">Edit</button>
+                        <button class="btn btn-danger btn-sm" onclick="deleteCustomer(${index})">Delete</button>
+                    </td>
+                `;
+                customerTableBody.appendChild(row);
+            });
+        }
+
+        // Save customers to localStorage
+        function saveCustomers(customers) {
+            localStorage.setItem('customers', JSON.stringify(customers));
+        }
+
+        // Add new customer to the table and localStorage
+        document.getElementById('customerForm').addEventListener('submit', function (e) {
+            e.preventDefault();
+
+            const customerName = document.getElementById('customerName').value;
+            const customerEmail = document.getElementById('customerEmail').value;
+            const customerPhone = document.getElementById('customerPhone').value;
+            const customerAddress = document.getElementById('customerAddress').value;
+
+            const newCustomer = {
+                name: customerName,
+                email: customerEmail,
+                phone: customerPhone,
+                address: customerAddress
+            };
+
+            const customers = JSON.parse(localStorage.getItem('customers')) || [];
+            customers.push(newCustomer);
+            saveCustomers(customers);
+            loadCustomers();  // Refresh the customer list
+
+            // Reset the form after submission
+            document.getElementById('customerForm').reset();
+            const modal = bootstrap.Modal.getInstance(document.getElementById('customerFormModal'));
+            modal.hide(); // Hide the modal after submitting the form
+        });
+
+        // Edit customer
+        function editCustomer(index) {
+            const customers = JSON.parse(localStorage.getItem('customers')) || [];
+            const customer = customers[index];
+
+            document.getElementById('editCustomerName').value = customer.name;
+            document.getElementById('editCustomerEmail').value = customer.email;
+            document.getElementById('editCustomerPhone').value = customer.phone;
+            document.getElementById('editCustomerAddress').value = customer.address;
+
+            // Save index in case we need to update
+            document.getElementById('editCustomerForm').onsubmit = function(e) {
+                e.preventDefault();
+                customer.name = document.getElementById('editCustomerName').value;
+                customer.email = document.getElementById('editCustomerEmail').value;
+                customer.phone = document.getElementById('editCustomerPhone').value;
+                customer.address = document.getElementById('editCustomerAddress').value;
+
+                customers[index] = customer;
+                saveCustomers(customers);
+                loadCustomers();  // Refresh the customer list
+                const modal = bootstrap.Modal.getInstance(document.getElementById('editCustomerModal'));
+                modal.hide(); // Close the modal
+            };
+        }
+
+        // Delete customer
+        function deleteCustomer(index) {
+            const customers = JSON.parse(localStorage.getItem('customers')) || [];
+            customers.splice(index, 1);
+            saveCustomers(customers);
+            loadCustomers();  // Refresh the customer list
+        }
+
+        // Load customers on page load
+        window.onload = loadCustomers;
+    </script>
+</body>
+</html>

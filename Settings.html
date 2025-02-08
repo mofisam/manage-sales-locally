@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Settings | eCommerce Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        /* General body styling */
+        body {
+            background-color: #f4f6f9;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: #333;
+        }
+        .navbar {
+            background-color: #1a2d3e;
+            padding: 10px 20px;
+        }
+
+        .navbar-brand {
+            font-size: 1.8rem;
+            font-weight: bold;
+        }
+        .navbar-nav .nav-link {
+            color: #ddd;
+        }
+        .navbar-nav .nav-link.active {
+            color: #fff;
+            background-color: #007bff;
+            border-radius: 5px;
+        }
+
+        /* Main content area */
+        .container {
+            margin-top: 80px;
+        }
+
+        .settings-form input, .settings-form textarea {
+            border-radius: 8px;
+            padding: 12px 15px;
+            font-size: 1.1rem;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .settings-form label {
+            font-weight: bold;
+            margin-bottom: 10px;
+            font-size: 1.1rem;
+            color: #333;
+        }
+
+        .settings-form button {
+            padding: 10px 25px;
+            font-size: 1.2rem;
+            background-color: #28a745;
+            color: #fff;
+            border-radius: 5px;
+            border: none;
+            transition: background-color 0.3s;
+        }
+
+        .settings-form button:hover {
+            background-color: #218838;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .sidebar {
+                display: none;
+            }
+            .settings-form input, .settings-form textarea {
+                font-size: 1rem;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .navbar-brand {
+                font-size: 1.5rem;
+            }
+            .navbar-nav .nav-link {
+            padding-left: 1rem;
+        }
+        }
+
+    </style>
+</head>
+<body>
+     <!-- Navbar with Hamburger Menu -->
+     <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">Dashboard</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="POS.html">Point of Sale</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="products.html">Products</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="Customers.html">Customers</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="Sales-History.html">Sales History</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="settings.html">Settings</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+
+        <!-- Settings Content -->
+        <div class="container col-md-9 col-sm-12">
+            <h2 class="mb-4 text-center">Company Settings</h2>
+            <form class="settings-form" id="settingsForm">
+                <div class="mb-3">
+                    <label for="logo" class="form-label">Company Logo</label>
+                    <input type="file" class="form-control" id="logo">
+                    <img id="logoPreview" style="max-width: 100px; margin-top: 10px;" />
+                </div>
+                <div class="mb-3">
+                    <label for="companyName" class="form-label">Company Name</label>
+                    <input type="text" class="form-control" id="companyName" placeholder="Enter company name">
+                </div>
+                <div class="mb-3">
+                    <label for="address" class="form-label">Address</label>
+                    <textarea class="form-control" id="address" rows="3" placeholder="Enter company address"></textarea>
+                </div>
+                <div class="mb-3">
+                    <label for="phoneNumber" class="form-label">Phone Number</label>
+                    <input type="text" class="form-control" id="phoneNumber" placeholder="Enter phone number">
+                </div>
+                <div class="mb-3">
+                    <label for="emailAddress" class="form-label">Email Address</label>
+                    <input type="email" class="form-control" id="emailAddress" placeholder="Enter email address">
+                </div>
+                <button type="submit" class="btn btn-primary btn-lg">Save Changes</button>
+            </form>
+        </div>
+
+    <!-- Bootstrap and JavaScript -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Function to load saved settings from localStorage
+        function loadSettings() {
+            const logo = localStorage.getItem('companyLogo');
+            const companyName = localStorage.getItem('companyName');
+            const address = localStorage.getItem('companyAddress');
+            const phoneNumber = localStorage.getItem('companyPhone');
+            const emailAddress = localStorage.getItem('companyEmail');
+
+            // Load logo as base64 if it exists
+            if (logo) {
+                document.getElementById('logoPreview').src = logo;
+            }
+
+            // Load other settings if they exist
+            if (companyName) {
+                document.getElementById('companyName').value = companyName;
+            }
+            if (address) {
+                document.getElementById('address').value = address;
+            }
+            if (phoneNumber) {
+                document.getElementById('phoneNumber').value = phoneNumber;
+            }
+            if (emailAddress) {
+                document.getElementById('emailAddress').value = emailAddress;
+            }
+        }
+
+        // JS for handling form submission
+        document.getElementById('settingsForm').addEventListener('submit', function (e) {
+            e.preventDefault();
+            // Get form values
+            const logoFile = document.getElementById('logo').files[0];
+            const companyName = document.getElementById('companyName').value;
+            const address = document.getElementById('address').value;
+            const phoneNumber = document.getElementById('phoneNumber').value;
+            const emailAddress = document.getElementById('emailAddress').value;
+
+            // Save logo as Base64 if uploaded
+            if (logoFile) {
+                const reader = new FileReader();
+                reader.onloadend = function () {
+                    localStorage.setItem('companyLogo', reader.result);
+                };
+                reader.readAsDataURL(logoFile);
+            }
+
+            // Save other settings to localStorage
+            localStorage.setItem('companyName', companyName);
+            localStorage.setItem('companyAddress', address);
+            localStorage.setItem('companyPhone', phoneNumber);
+            localStorage.setItem('companyEmail', emailAddress);
+
+            alert('Settings saved successfully!');
+        });
+
+        // Load settings when page loads
+        window.onload = loadSettings;
+    </script>
+</body>
+</html>
